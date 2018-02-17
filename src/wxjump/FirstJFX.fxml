@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wxjump.WxController">
+   <children>
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="550.0" prefWidth="940.0">
+               <children>
+                  <ImageView id="srcImg" fx:id="srcImg" fitHeight="540.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView id="procImg" fx:id="procImg" fitHeight="540.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView id="destImg" fx:id="destImg" fitHeight="540.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="50.0" prefWidth="900.0">
+               <children>
+                  <Button id="getImgBtn" fx:id="getImgBtn" mnemonicParsing="false" onAction="#getImgFromPhone" prefHeight="23.0" prefWidth="295.0" text="获取图片">
+                     <HBox.margin>
+                        <Insets left="15.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="procImgBtn" fx:id="procImgBtn" mnemonicParsing="false" onAction="#getChessPoint" prefHeight="23.0" prefWidth="295.0" text="处理图片">
+                     <HBox.margin>
+                        <Insets left="15.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="jumpBtn" fx:id="jumpBtn" mnemonicParsing="false" onAction="#getDistance" prefHeight="23.0" prefWidth="295.0" text="开始跳跃">
+                     <HBox.margin>
+                        <Insets left="15.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
