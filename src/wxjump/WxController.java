@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -15,6 +16,7 @@ import org.opencv.core.Scalar;
 
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.utils.Converters;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -124,15 +126,16 @@ public class WxController
 	public void getDistance(ActionEvent event)
 	{
 				// 为转换的灰度图申请空间
-
+				int cutHight = 300;
 				Mat mat_src =  Imgcodecs.imread(WxModel.pcImg,Imgcodecs.CV_LOAD_IMAGE_COLOR);
 				Mat mat_temp = Imgcodecs.imread(WxModel.tmpImg, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-				Rect roiArea=new Rect(0, 300 ,mat_src.width() , (int)(WxModel.chessPoint.y+ mat_temp.rows() - 300));  
-		        
-				mat_src=new Mat(mat_src,roiArea);  
-				//Mat mat_display = new Mat(mat_src.rows(), mat_src.cols(), 0);
-				Mat mat_display = mat_src.clone();
+				Rect roiArea=new Rect(0, cutHight ,mat_src.width() , (int)(WxModel.chessPoint.y+ mat_temp.rows() - cutHight));  
+				
 
+				mat_src=new Mat(mat_src,roiArea);
+				Mat mat_display = mat_src.clone();
+				//Mat mat_display = new Mat(mat_src.rows(), mat_src.cols(), 0);
+				
 				//将处理好的彩色图片转换为灰度图，放到srcGrey
 				Imgproc.cvtColor(mat_src, mat_src, Imgproc.COLOR_RGB2GRAY);
 				
@@ -168,16 +171,29 @@ public class WxController
 			    for(int i=0;i<contours.size();i++)
 			    {
 		            //System.out.println(contours.get(i).size()+"   rows: "+contours.get(i).rows()+"   cols: "+contours.get(i).cols());
-		            //for(int j=0;j<contours.get(i).total();j++) System.out.println("轮廓 "+(i+1)+"的坐标信息："+contours.get(i).toList().get(j));
-		            double ConArea = Imgproc.contourArea(contours.get(i), true);
-		            if(ConArea >= maxarea) 
-		            {
-		            	maxarea = ConArea;
-		            	maxcontour_id = i;
-		            }
-		            //System.out.println("------------------------------");
+		            //for(int j=0;j<contours.get(i).total();j++) System.out.println("轮廓 "+(i+1)+"的坐标信息："+contours.get(i).toList().get(j));		    	
+			    	if(isNotUnderChess(mat_src,contours.get(i)))
+			    	{
+			    		double ConArea = Imgproc.contourArea(contours.get(i), true);
+			            if(ConArea >= maxarea) 
+			            {
+			            	maxarea = ConArea;
+			            	maxcontour_id = i;
+			            }
+			    	}
 		        }
 			    MatOfPoint temp_largest = contours.get(maxcontour_id);
+			    
+			    //List<Point> t = temp_largest.toList();
+			   
+			    for(int i =0; i < temp_largest.toList().size(); i++)
+			    {
+			    	 List<Point> t2 = new ArrayList<Point>();
+			    	Point tp = new Point(temp_largest.toList().get(i).x,temp_largest.toList().get(i).y+cutHight);
+			    	t2.add(tp);
+			    	Converters.Mat_to_vector_Point(temp_largest, t2);
+			    }
+			    
 			    ArrayList<MatOfPoint> largest_contours = new ArrayList<MatOfPoint>();
 			    largest_contours.add(temp_largest);
 			    Imgproc.drawContours(mat_display,largest_contours, -1, new Scalar(0, 255, 0), 5);
@@ -187,5 +203,17 @@ public class WxController
 				
 	}
 	
-	
+	public boolean isNotUnderChess(Mat mat_src , MatOfPoint temp_largest)
+	{
+		boolean result = true;
+		for(int i =0; i < temp_largest.total(); i++)
+	    {
+	    	if(temp_largest.toList().get(i).y == mat_src.rows())   
+	    	{
+	    		result = false;
+	    		break;
+	    	}
+	    }
+		return result;
+	}	
 }
